@@ -3,7 +3,7 @@ import { extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { Container, Header, Input, Button } from 'semantic-ui-react';
+import { Container, Header, Form, Input, Button } from 'semantic-ui-react';
 
 const LOGIN_MUTATION = gql`
   mutation($email: String!, $password: String!) {
@@ -33,7 +33,7 @@ export default observer(class Login extends Component {
     const { name, value } = e.target;
     // Mutate state directly via mobx. Similar to setState({[e.target.name]: e.target.value })
     this[name] = value;
-  }
+  };
 
   handleSubmit = async mutation => {
     const { email, password } = this;
@@ -44,7 +44,7 @@ export default observer(class Login extends Component {
       localStorage.setItem('sc_token', token);
       localStorage.setItem('sc_refreshToken', refreshToken);
     }
-  }
+  };
 
   render() {
     const { email, password } = this;
@@ -52,26 +52,32 @@ export default observer(class Login extends Component {
     return (
       <Container text>
         <Header as='h2'>Login</Header>
-        <Input
-          name='email'
-          value={email}
-          placeholder='Email'
-          onChange={this.handleChange}
-          fluid
-        />
-        <Input
-          type='password'
-          name='password'
-          value={password}
-          placeholder='Password'
-          onChange={this.handleChange}
-          fluid
-        />
-        <Mutation mutation={LOGIN_MUTATION}>
-          {(login, { data }) => (
-            <Button onClick={() => this.handleSubmit(login)}>Submit</Button>
-          )}
-        </Mutation>
+        <Form>
+          <Form.Field>
+            <Input
+              name='email'
+              value={email}
+              placeholder='Email'
+              onChange={this.handleChange}
+              fluid
+            />
+          </Form.Field>
+          <Form.Field>
+            <Input
+              type='password'
+              name='password'
+              value={password}
+              placeholder='Password'
+              onChange={this.handleChange}
+              fluid
+            />
+          </Form.Field>
+          <Mutation mutation={LOGIN_MUTATION}>
+            {(login, { data }) => (
+              <Button onClick={() => this.handleSubmit(login)}>Submit</Button>
+            )}
+          </Mutation>
+        </Form>
       </Container>
     );
   };

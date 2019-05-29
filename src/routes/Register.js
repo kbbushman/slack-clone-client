@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { Container, Header, Input, Button, Message } from 'semantic-ui-react';
+import { Container, Header, Form, Input, Button, Message } from 'semantic-ui-react';
 
 const REGISTER_MUTATION= gql`
   mutation($username: String!, $email: String!, $password: String!) {
@@ -23,12 +23,12 @@ class Register extends Component {
     usernameError: '',
     emailError: '',
     passwordError: '',
-  }
+  };
 
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
-  }
+  };
 
   handleSubmit = async mutation => {
     this.setState({
@@ -52,9 +52,7 @@ class Register extends Component {
 
       this.setState(err);
     }
-
-    // this.setState({ username: '', email: '', password: '' });
-  }
+  };
 
   render() {
     const { username, email, password, usernameError, emailError, passwordError } = this.state;
@@ -65,10 +63,10 @@ class Register extends Component {
     if (passwordError) errorList.push(passwordError);
 
     return (
-      <Mutation mutation={REGISTER_MUTATION}>
-        {(register, { data }) => (
-          <Container text>
-            <Header as='h2'>Register</Header>
+      <Container text>
+        <Form>
+          <Header as='h2'>Register</Header>
+          <Form.Field>
             <Input
               name='username'
               value={username}
@@ -77,6 +75,8 @@ class Register extends Component {
               onChange={this.handleChange}
               fluid
             />
+          </Form.Field>
+          <Form.Field>
             <Input
               name='email'
               value={email}
@@ -85,6 +85,8 @@ class Register extends Component {
               onChange={this.handleChange}
               fluid
             />
+          </Form.Field>
+          <Form.Field>
             <Input
               type='password'
               name='password'
@@ -94,19 +96,23 @@ class Register extends Component {
               onChange={this.handleChange}
               fluid
             />
-            <Button onClick={() => this.handleSubmit(register)}>Submit</Button>
-            {(usernameError || emailError || passwordError) && (
-              <Message
-                error
-                header='There were some errors with your submission'
-                list={errorList}
-              />
+          </Form.Field>
+          <Mutation mutation={REGISTER_MUTATION}>
+            {(register, { data }) => (
+              <Button onClick={() => this.handleSubmit(register)}>Submit</Button>
             )}
-          </Container>
+          </Mutation>
+        </Form>
+        {(usernameError || emailError || passwordError) && (
+          <Message
+            error
+            header='There were some errors with your submission'
+            list={errorList}
+          />
         )}
-      </Mutation>
-    )
-  }
-}
+      </Container>
+    );
+  };
+};
 
 export default Register;
