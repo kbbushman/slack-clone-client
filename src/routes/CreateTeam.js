@@ -54,10 +54,10 @@ class CreateTeam extends Component {
   };
 
   render() {
-    const { email, errors: { nameError } } = this;
+    const { name, errors: { nameError } } = this;
     const errorList = [];
 
-    if (nameError) errorList.push(emailError);
+    if (nameError) errorList.push(nameError);
 
     return (
       <Container text>
@@ -90,4 +90,4 @@ class CreateTeam extends Component {
   };
 };
 
-export default observer(Login);
+export default observer(CreateTeam);
