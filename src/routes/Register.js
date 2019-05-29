@@ -66,33 +66,30 @@ class Register extends Component {
       <Container text>
         <Form>
           <Header as='h2'>Register</Header>
-          <Form.Field>
+          <Form.Field error={!!usernameError}>
             <Input
               name='username'
               value={username}
               placeholder='Username'
-              error={!!usernameError}
               onChange={this.handleChange}
               fluid
             />
           </Form.Field>
-          <Form.Field>
+          <Form.Field error={!!emailError}>
             <Input
               name='email'
               value={email}
               placeholder='Email'
-              error={!!emailError}
               onChange={this.handleChange}
               fluid
             />
           </Form.Field>
-          <Form.Field>
+          <Form.Field error={!!passwordError}>
             <Input
               type='password'
               name='password'
               value={password}
               placeholder='Password'
-              error={!!passwordError}
               onChange={this.handleChange}
               fluid
             />
@@ -103,7 +100,7 @@ class Register extends Component {
             )}
           </Mutation>
         </Form>
-        {(usernameError || emailError || passwordError) && (
+        {errorList.length > 0 && (
           <Message
             error
             header='There were some errors with your submission'
