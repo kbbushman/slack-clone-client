@@ -3,7 +3,7 @@ import { extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { Container, Header, Form, Input, Button } from 'semantic-ui-react';
+import { Container, Header, Form, Input, Button, Message } from 'semantic-ui-react';
 
 const LOGIN_MUTATION = gql`
   mutation($email: String!, $password: String!) {
@@ -26,6 +26,7 @@ export default observer(class Login extends Component {
     extendObservable(this, {
       email: '',
       password: '',
+      errors: {}
     });
   };
 
@@ -37,23 +38,38 @@ export default observer(class Login extends Component {
 
   handleSubmit = async mutation => {
     const { email, password } = this;
+
     const response = await mutation({ variables: { email, password } });
+
     console.log(response);
-    const { ok, token, refreshToken } = response.data.login;
+
+    const { ok, token, refreshToken, errors } = response.data.login;
+
     if (ok) {
       localStorage.setItem('sc_token', token);
       localStorage.setItem('sc_refreshToken', refreshToken);
+      this.props.history.push('/');
+    } else {
+      const err = {};
+      errors.forEach(({ path, message }) => {
+        err[`${path}Error`] = message;
+      });
+      this.errors = { ...err };
     }
   };
 
   render() {
-    const { email, password } = this;
+    const { email, password, errors: { emailError, passwordError } } = this;
+    const errorList = [];
+
+    if (emailError) errorList.push(emailError);
+    if (passwordError) errorList.push(passwordError);
 
     return (
       <Container text>
         <Header as='h2'>Login</Header>
         <Form>
-          <Form.Field>
+          <Form.Field error={!!emailError}>
             <Input
               name='email'
               value={email}
@@ -62,7 +78,7 @@ export default observer(class Login extends Component {
               fluid
             />
           </Form.Field>
-          <Form.Field>
+          <Form.Field error={!!passwordError}>
             <Input
               type='password'
               name='password'
@@ -78,6 +94,13 @@ export default observer(class Login extends Component {
             )}
           </Mutation>
         </Form>
+        {errorList.length > 0 && (
+          <Message
+            error
+            header='There were some errors with your submission'
+            list={errorList}
+          />
+        )}
       </Container>
     );
   };
