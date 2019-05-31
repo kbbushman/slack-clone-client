@@ -35,9 +35,13 @@ class CreateTeam extends Component {
 
   handleSubmit = async mutation => {
     const { name } = this;
+    let response = null;
 
-    const response = await mutation({ variables: { name } });
-
+    try {
+      response = await mutation({ variables: { name } });
+    } catch (err) {
+      return this.props.history.push('/login');
+    }
     console.log(response);
 
     const { ok, errors } = response.data.createTeam;
