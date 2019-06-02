@@ -5,10 +5,19 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
+import AddChannelModal from '../components/AddChannelModal';
 
 class Sidebar extends Component {
   state = {
     openAddChannelModal: false,
+  }
+
+  handleAddChannelClick = () => {
+    this.setState({ openAddChannelModal: true });
+  }
+
+  handleCloseAddChannelModal = () => {
+    this.setState({ openAddChannelModal: false });
   }
 
   render() {
@@ -56,6 +65,12 @@ class Sidebar extends Component {
                 username={username}
                 channels={team.channels}
                 users={[{ id: 1, name: 'Slackbot'}, { id: 2, name: 'User1' }]}
+                onAddChannelClick={this.handleAddChannelClick}
+              />,
+              <AddChannelModal
+                key="sidebar-add-channel-modal"
+                open={this.state.openAddChannelModal}
+                onClose={this.handleCloseAddChannelModal}
               />
             ];
           }
