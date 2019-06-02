@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+import findIndex from 'lodash/findIndex';
 import decode from 'jwt-decode';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
@@ -28,7 +28,7 @@ const Sidebar = ({ currentTeamId }) => {
 
           console.log(allTeams);
 
-          const teamIndex = _.findIndex(allTeams, ['id', currentTeamId]);
+          const teamIndex = findIndex(allTeams, ['id', currentTeamId]);
           const team = allTeams[teamIndex];
           let username = '';
 
