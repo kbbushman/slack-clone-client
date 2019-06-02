@@ -20,25 +20,25 @@ const middlewareLink = setContext(() => ({
   }
 }));
 
-const afterwareLink = new ApolloLink((operation, forward) =>
-  forward(operation).map((response) => {
-    const { response: { headers } } = operation.getContext();
-    console.log(headers.get('x-token'));
+const afterwareLink = new ApolloLink((operation, forward) => { 
+  return forward(operation).map(response => {
+    const context = operation.getContext();
+    const { response: { headers } } = context;
     if (headers) {
       const token = headers.get('x-token');
-      const refreshToken = headers.get('x-refreshToken');
+      const refreshToken = headers.get('x-refresh-token');
 
       if (token) {
-        localStorage.setItem('sc_token', token);
+        localStorage.setItem('token', token);
       }
 
       if (refreshToken) {
-        localStorage.setItem('sc_refreshToken', refreshToken);
+        localStorage.setItem('refreshToken', refreshToken);
       }
     }
-    console.log('AFTERWARE RAN... Token = ', headers.get('x-token'));
     return response;
-}));
+  });
+});
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
