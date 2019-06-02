@@ -44,7 +44,7 @@ const user = ({ id, name }) => (
   </SideBarListItem>
 );
 
-export default ({ teamName, username, channels, users, handleAddChannelClick }) => (
+export default ({ teamName, username, channels, users, onAddChannelClick }) => (
   <ChannelWrapper>
     <PushLeft>
       <TeamNameHeader>{teamName}</TeamNameHeader>
@@ -52,7 +52,7 @@ export default ({ teamName, username, channels, users, handleAddChannelClick }) 
     </PushLeft>
     <div>
       <SideBarList>
-        <SideBarListHeader>Channels <Icon name="add circle" onClick={handleAddChannelClick} /></SideBarListHeader>
+        <SideBarListHeader>Channels <Icon name="add circle" onClick={onAddChannelClick} /></SideBarListHeader>
         {channels.map(channel)}
       </SideBarList>
     </div>
