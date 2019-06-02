@@ -15,6 +15,6 @@ const Home = () => <Query query={gql`
           ? <h1>Loading...</h1>
           : data.allUsers.map(user => <h1 key={user.id}>{user.email}</h1>)
         }
-      </Query>
+      </Query>;
 
 export default Home;
