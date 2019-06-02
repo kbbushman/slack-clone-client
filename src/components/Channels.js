@@ -18,6 +18,9 @@ const SideBarList = styled.ul`
   width: 100%;
   list-style: none;
   padding-left: 0px;
+  i {
+    cursor: pointer;
+  }
 `;
 
 const paddingLeft = 'padding-left: 10px';
