@@ -13,9 +13,9 @@ const ViewTeam = ({ data: { loading, allTeams }, match: { params: { teamId, chan
     return null;
   }
 
-  const teamIndex = !!teamId ? findIndex(allTeams, ['id', parseInt(teamId, 10)]) : 0;
+  const teamIndex = teamId ? findIndex(allTeams, ['id', parseInt(teamId, 10)]) : 0;
   const team = allTeams[teamIndex];
-  const channelIndex = !!channelId ? findIndex(team.channels, ['id', parseInt(channelId, 10)]) : 0;
+  const channelIndex = channelId ? findIndex(team.channels, ['id', parseInt(channelId, 10)]) : 0;
   const channel = team.channels[channelIndex];
 
   return (
