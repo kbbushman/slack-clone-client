@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import findIndex from 'lodash/findIndex';
 import decode from 'jwt-decode';
-import { Query } from 'react-apollo';
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/AddChannelModal';
-import { ALL_TEAMS_QUERY } from '../graphql/teams';
 
 class Sidebar extends Component {
   state = {
@@ -21,54 +18,35 @@ class Sidebar extends Component {
   }
 
   render() {
-    return (
-      <Query query={ALL_TEAMS_QUERY}>
-        {
-          ({ loading, error, data: { allTeams } }) => {
-            const { currentTeamId } = this.props;
+    const { teams, team } = this.props;
 
-            if (loading) {
-              return <h1>Loading...</h1>;
-            }
+    let username = '';
 
-            console.log(allTeams);
+    try {
+      const token = localStorage.getItem('sc_token');
+      const { user } = decode(token);
+      username = user.username;
+    } catch (err) {}
 
-            const teamIndex = currentTeamId ? findIndex(allTeams, ['id', parseInt(currentTeamId, 10)]) : 0;
-            const team = allTeams[teamIndex];
-            let username = '';
-
-            try {
-              const token = localStorage.getItem('sc_token');
-              const { user } = decode(token);
-              username = user.username;
-            } catch (err) {}
-
-            return [
-              <Teams key="team-sidebar" teams={allTeams.map(team => ({
-                id: team.id,
-                letter: team.name.charAt(0).toUpperCase(),
-              }))} />,
-              <Channels
-                key="channels-sidebar"
-                teamName={team.name}
-                username={username}
-                teamId={team.id}
-                channels={team.channels}
-                users={[{ id: 1, name: 'Slackbot'}, { id: 2, name: 'User1' }]}
-                onAddChannelClick={this.handleAddChannelClick}
-              />,
-              <AddChannelModal
-                teamId={team.id}
-                key="sidebar-add-channel-modal"
-                open={this.state.openAddChannelModal}
-                onClose={this.handleCloseAddChannelModal}
-              />
-            ];
-          }
-        }
-      </Query>
-    );
-  };
+    return [
+      <Teams key="team-sidebar" teams={teams} />,
+      <Channels
+        key="channels-sidebar"
+        teamName={team.name}
+        username={username}
+        teamId={team.id}
+        channels={team.channels}
+        users={[{ id: 1, name: 'Slackbot'}, { id: 2, name: 'User1' }]}
+        onAddChannelClick={this.handleAddChannelClick}
+      />,
+      <AddChannelModal
+        teamId={team.id}
+        key="sidebar-add-channel-modal"
+        open={this.state.openAddChannelModal}
+        onClose={this.handleCloseAddChannelModal}
+      />
+    ];
+  }
 };
 
 export default Sidebar;
