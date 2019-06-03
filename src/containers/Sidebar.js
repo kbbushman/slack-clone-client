@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import findIndex from 'lodash/findIndex';
 import decode from 'jwt-decode';
-import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/AddChannelModal';
+import { ALL_TEAMS_QUERY } from '../graphql/teams';
 
 class Sidebar extends Component {
   state = {
@@ -22,18 +22,7 @@ class Sidebar extends Component {
 
   render() {
     return (
-      <Query query={gql`
-        {
-          allTeams {
-            id
-            name
-            channels {
-              id
-              name
-            }
-          }
-        }
-      `}>
+      <Query query={ALL_TEAMS_QUERY}>
         {
           ({ loading, error, data: { allTeams } }) => {
             const { currentTeamId } = this.props;
