@@ -50,6 +50,18 @@ export default compose(
     handleSubmit: async (values, { props: { onClose, teamId, mutate }, setSubmitting }) => {
       await mutate({
         variables: { teamId, name: values.name },
+        // Optimistic Update for createChannel
+        optimisticResponse: {
+          createChannel: {
+            __typename: 'Mutation',
+            ok: true,
+            channel: {
+              __typename: 'Channel',
+              id: -1,
+              name: values.name,
+            },
+          },
+        },
         update: (store, { data: { createChannel } }) => {
           const { ok, channel } = createChannel;
           if (!ok) {
