@@ -42,7 +42,7 @@ const ViewTeam = ({ data: { loading, allTeams }, match: { params: { teamId, chan
           <li></li>
         </ul>
       </Messages>}
-      {Channel && <SendMessage channelName={channel.name} />}
+      {channel && <SendMessage channelName={channel.name} />}
     </AppLayout>
   );
 };
