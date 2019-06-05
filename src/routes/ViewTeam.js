@@ -15,12 +15,15 @@ const ViewTeam = ({ data: { loading, allTeams }, match: { params: { teamId, chan
   }
 
   if (!allTeams.length) {
-    return <Redirect to='/create-team' />
+    return <Redirect to='/create-team' />;
   }
 
-  const teamIndex = teamId ? findIndex(allTeams, ['id', parseInt(teamId, 10)]) : 0;
+  let teamIdInteger = parseInt(teamId, 10);
+  const teamIndex = teamIdInteger ? findIndex(allTeams, ['id', teamIdInteger]) : 0;
   const team = allTeams[teamIndex];
-  const channelIndex = channelId ? findIndex(team.channels, ['id', parseInt(channelId, 10)]) : 0;
+
+  let channelIdInteger = parseInt(channelId, 10);
+  const channelIndex = channelIdInteger ? findIndex(team.channels, ['id', channelIdInteger]) : 0;
   const channel = team.channels[channelIndex];
 
   return (
